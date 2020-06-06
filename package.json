@@ -15,11 +15,11 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "release": "npm run problems && npm run test && npm run build && npm run publish",
+    "release": "npm run problems && npm run test && npm run build && npm publish",
     "problems": "tsc --noEmit",
     "build": "npm run clean && npm run compile && rollup -c && cp lib/*.d.ts dist",
     "test": "gulp test",
-    "compile": "npm run tsc",
+    "compile": "tsc",
     "clean": "rm -rf dist"
   }
 }
