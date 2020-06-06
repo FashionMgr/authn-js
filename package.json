@@ -1,5 +1,5 @@
 {
-  "name": "@fashionmanger/authn-svc",
+  "name": "@fashionmanager/authn",
   "version": "0.1.0",
   "description": "Browser integration library for AuthN service.",
   "main": "./dist/authn.js",
@@ -15,11 +15,11 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "release": "yarn problems && yarn test && yarn build && yarn publish",
-    "problems": "yarn tsc --noEmit",
-    "build": "yarn clean && yarn compile && rollup -c && cp lib/*.d.ts dist",
+    "release": "npm run problems && npm run test && npm run build && npm run publish",
+    "problems": "tsc --noEmit",
+    "build": "npm run clean && npm run compile && rollup -c && cp lib/*.d.ts dist",
     "test": "gulp test",
-    "compile": "yarn tsc",
+    "compile": "npm run tsc",
     "clean": "rm -rf dist"
   }
 }
