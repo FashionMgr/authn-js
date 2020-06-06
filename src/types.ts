@@ -1,10 +1,13 @@
 export interface Credentials {
-  [index: string]: string;
-  username: string;
+  [index: string]: string | undefined;
+  email: string;
   password: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
 }
 
-export interface KeratinError {
+export interface AuthError {
   field?: string;
   message: string;
 }

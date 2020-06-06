@@ -1,12 +1,9 @@
 {
-  "name": "keratin-authn",
-  "description": "Browser integration library for Keratin AuthN service.",
-  "main": "./dist/keratin-authn.umd.js",
-  "authors": [
-    "Lance Ivy"
-  ],
-  "license": "LGPL-3.0",
-  "homepage": "https://github.com/keratin/authn-js",
+  "name": "fashionmanager-authn",
+  "description": "Browser integration library for fashionmanager AuthN service.",
+  "main": "./dist/fm-authn.umd.js",
+  "license": "PRIVATE",
+  "homepage": "https://github.com/fashionmgr/authn-js",
   "ignore": [
     "**/.*",
     "src",

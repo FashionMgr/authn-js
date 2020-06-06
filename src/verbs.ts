@@ -1,5 +1,5 @@
 import { StringMap } from "./types";
-import { KeratinError } from "./types";
+import { AuthError } from "./types";
 import formData from "./formData";
 
 export function get<T>(url: string, data: StringMap): Promise<T> {
@@ -27,13 +27,13 @@ export function post<T>(url: string, data: StringMap): Promise<T> {
 function jhr<T>(sender: (xhr: XMLHttpRequest) => void): Promise<T> {
   return new Promise((
     fulfill: (data?: T) => any,
-    reject: (errors: KeratinError[]) => any
+    reject: (errors: AuthError[]) => any
   ) => {
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true; // enable authentication server cookies
     xhr.onreadystatechange = () => {
       if (xhr.readyState == XMLHttpRequest.DONE) {
-        const data: {result?: T, errors?: KeratinError[]} = (xhr.responseText.length > 1) ? JSON.parse(xhr.responseText) : {};
+        const data: {result?: T, errors?: AuthError[]} = (xhr.responseText.length > 1) ? JSON.parse(xhr.responseText) : {};
 
         if (data.result) {
           fulfill(data.result);

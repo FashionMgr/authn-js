@@ -5,7 +5,7 @@ export default [
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/keratin-authn.js",
+      file: "./dist/fm-authn.js",
       format: "cjs"
     },
     plugins: [filesize()]
@@ -13,25 +13,25 @@ export default [
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/keratin-authn.umd.js",
+      file: "./dist/fm-authn.umd.js",
       format: "umd"
     },
-    name: "KeratinAuthN",
+    name: "FMAuthN",
     plugins: []
   },
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/keratin-authn.min.js",
+      file: "./dist/fm-authn.min.js",
       format: "umd"
     },
-    name: "KeratinAuthN",
+    name: "FMAuthN",
     plugins: [uglify(), filesize()]
   },
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/keratin-authn.module.js",
+      file: "./dist/fm-authn.module.js",
       format: "es"
     },
     plugins: [filesize()]

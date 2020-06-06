@@ -1,6 +1,6 @@
 QUnit.begin(function () {
-  KeratinAuthN.setHost('https://authn.example.com');
-  KeratinAuthN.setCookieStore('authn');
+  FMAuthN.setHost('https://authn.example.com');
+  FMAuthN.setCookieStore('authn');
   writeCookie('hello', 'world');
   writeCookie('foo', 'bar');
 });
@@ -52,7 +52,7 @@ function deleteCookie(name) {
 
 function assertInstalledToken(assertions) {
   return function () {
-    var token = KeratinAuthN.session();
+    var token = FMAuthN.session();
     assertions.ok(token.length > 0, "token is a string of some length");
     assertions.equal(token.split('.').length, 3, "token has three parts");
 
@@ -83,7 +83,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return KeratinAuthN.signup({username: 'test', password: 'test'})
+  return FMAuthN.signup({username: 'test', password: 'test'})
     .then(assertInstalledToken(assert));
 });
 QUnit.test("failure", function(assert) {
@@ -91,7 +91,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return KeratinAuthN.signup({username: 'test', password: 'test'})
+  return FMAuthN.signup({username: 'test', password: 'test'})
     .then(refuteSuccess(assert))
     .catch(function(errors) {
       assert.deepEqual(errors, [{field: 'foo', message: 'bar'}]);
@@ -105,11 +105,11 @@ QUnit.test("double submit", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  KeratinAuthN.signup({username: 'test', password: 'test'})
+  FMAuthN.signup({username: 'test', password: 'test'})
     .then(function (data) { assert.ok(true, "first request finished") })
     .then(done);
 
-  KeratinAuthN.signup({username: 'test', password: 'test'})
+  FMAuthN.signup({username: 'test', password: 'test'})
     .then(refuteSuccess(assert))
     .catch(function(errors) {
       assert.deepEqual(errors, [{message: 'duplicate'}]);
@@ -125,7 +125,7 @@ QUnit.test("name is not taken", function(assert) {
     jsonResult(true)
   );
 
-  return KeratinAuthN.isAvailable('test')
+  return FMAuthN.isAvailable('test')
     .then(function (availability) {
       assert.ok(availability, "is available");
     });
@@ -135,7 +135,7 @@ QUnit.test("name is taken", function(assert) {
     jsonErrors({username: 'TAKEN'})
   );
 
-  return KeratinAuthN.isAvailable('test')
+  return FMAuthN.isAvailable('test')
     .then(function (availability) {
       assert.notOk(availability, "is taken")
     });
@@ -145,18 +145,18 @@ QUnit.module("restoreSession", startServer);
 QUnit.test("no existing session", function(assert) {
   deleteCookie('authn');
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(refuteSuccess(assert))
     .catch(function () {
-      assert.notOk(KeratinAuthN.session(), "no session");
+      assert.notOk(FMAuthN.session(), "no session");
     });
 });
 QUnit.test("existing session", function(assert) {
   writeCookie('authn', idToken({age: 1}));
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(function () {
-      assert.ok(KeratinAuthN.session(), "session found");
+      assert.ok(FMAuthN.session(), "session found");
     });
 });
 QUnit.test("aging session", function(assert) {
@@ -168,9 +168,9 @@ QUnit.test("aging session", function(assert) {
     jsonResult({id_token: newSession})
   );
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(function () {
-      assert.equal(KeratinAuthN.session(), newSession, "session is updated");
+      assert.equal(FMAuthN.session(), newSession, "session is updated");
     });
 });
 QUnit.test("aging and revoked session", function(assert) {
@@ -181,10 +181,10 @@ QUnit.test("aging and revoked session", function(assert) {
     ""
   ]);
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(refuteSuccess(assert))
     .catch(function () {
-      assert.notOk(KeratinAuthN.session(), "session was revoked");
+      assert.notOk(FMAuthN.session(), "session was revoked");
     });
 });
 QUnit.test("expired session", function(assert) {
@@ -196,9 +196,9 @@ QUnit.test("expired session", function(assert) {
     jsonResult({id_token: newSession})
   );
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(function () {
-      assert.equal(KeratinAuthN.session(), newSession, "session re-established");
+      assert.equal(FMAuthN.session(), newSession, "session re-established");
     });
 });
 QUnit.test("expired and revoked session", function(assert) {
@@ -209,16 +209,16 @@ QUnit.test("expired and revoked session", function(assert) {
     ""
   ]);
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(refuteSuccess(assert))
     .catch(function () {
-      assert.notOk(KeratinAuthN.session(), "session was revoked");
+      assert.notOk(FMAuthN.session(), "session was revoked");
     });
 });
 QUnit.test("malformed JWT", function(assert) {
   writeCookie('authn', 'invalid');
 
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(refuteSuccess(assert))
     .catch(function (e) {
       assert.equal(e, 'Malformed JWT: invalid encoding');
@@ -234,9 +234,9 @@ QUnit.test("no existing session", function(assert) {
     jsonResult({id_token: newSession})
   );
 
-  return KeratinAuthN.importSession()
+  return FMAuthN.importSession()
     .then(function () {
-      assert.equal(KeratinAuthN.session(), newSession, "session re-established");
+      assert.equal(FMAuthN.session(), newSession, "session re-established");
     });
 });
 
@@ -246,7 +246,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return KeratinAuthN.login({username: 'test', password: 'test'})
+  return FMAuthN.login({username: 'test', password: 'test'})
     .then(assertInstalledToken(assert));
 });
 QUnit.test("failure", function(assert) {
@@ -254,7 +254,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return KeratinAuthN.login({username: 'test', password: 'test'})
+  return FMAuthN.login({username: 'test', password: 'test'})
     .then(refuteSuccess(assert))
     .catch(function(errors) {
       assert.deepEqual(errors, [{field: 'foo', message: 'bar'}]);
@@ -265,7 +265,7 @@ QUnit.module("requestPasswordReset", startServer);
 QUnit.test("success or failure", function(assert) {
   this.server.respondWith('GET', 'https://authn.example.com/password/reset?username=test', '');
 
-  return KeratinAuthN.requestPasswordReset('test')
+  return FMAuthN.requestPasswordReset('test')
     .then(function () {
       assert.ok(true, "should always succeed")
     })
@@ -277,7 +277,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return KeratinAuthN.changePassword({
+  return FMAuthN.changePassword({
       password: 'new',
       currentPassword: 'old'
     })
@@ -288,7 +288,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return KeratinAuthN.changePassword({
+  return FMAuthN.changePassword({
       password: 'new',
       currentPassword: 'wrong'
     })
@@ -304,7 +304,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return KeratinAuthN.resetPassword({
+  return FMAuthN.resetPassword({
       password: 'new',
       token: jwt({foo: 'bar'})
     })
@@ -315,7 +315,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return KeratinAuthN.resetPassword({
+  return FMAuthN.resetPassword({
       password: 'new',
       token: jwt({foo: 'bar'})
     })
@@ -329,13 +329,13 @@ QUnit.module("logout", startServer);
 QUnit.test("success", function(assert) {
   this.server.respondWith('DELETE', 'https://authn.example.com/session', '');
   writeCookie('authn', idToken({age: 1}));
-  return KeratinAuthN.restoreSession()
+  return FMAuthN.restoreSession()
     .then(function () {
-      assert.ok(KeratinAuthN.session());
+      assert.ok(FMAuthN.session());
     })
-    .then(KeratinAuthN.logout)
+    .then(FMAuthN.logout)
     .then(function() {
-      assert.notOk(KeratinAuthN.session());
+      assert.notOk(FMAuthN.session());
     });
 });
 
@@ -343,7 +343,7 @@ QUnit.module("requestSessionToken", startServer);
 QUnit.test("success or failure", function(assert) {
   this.server.respondWith('GET', 'https://authn.example.com/session/token?username=test', '');
 
-  return KeratinAuthN.requestSessionToken('test')
+  return FMAuthN.requestSessionToken('test')
     .then(function () {
       assert.ok(true, "should always succeed")
     })
@@ -355,7 +355,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return KeratinAuthN.sessionTokenLogin({token: 'test'})
+  return FMAuthN.sessionTokenLogin({token: 'test'})
     .then(assertInstalledToken(assert));
 });
 QUnit.test("failure", function(assert) {
@@ -363,7 +363,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return KeratinAuthN.sessionTokenLogin({
+  return FMAuthN.sessionTokenLogin({
       token: jwt({foo: 'bar'})
     })
     .then(refuteSuccess(assert))

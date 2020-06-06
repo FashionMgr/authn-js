@@ -7,7 +7,7 @@
     "module": "es2015",
     "declaration": true,
     "outDir": "lib/",
-
+    "lib": ["DOM", "ES2020", "es2018.Promise"],
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitThis": true

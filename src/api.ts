@@ -2,7 +2,7 @@
  * Bare API methods have no local side effects (unless you count debouncing).
  */
 
-import { Credentials, KeratinError } from './types';
+import { Credentials, AuthError } from './types';
 import { get, post, del } from "./verbs";
 
 // TODO: extract debouncing
@@ -13,14 +13,14 @@ export function setHost(URL: string): void {
   ISSUER = URL.replace(/\/$/, '');
 }
 
-interface TokenResponse{
+interface TokenResponse {
   id_token: string;
 }
 
 export function signup(credentials: Credentials): Promise<string> {
   return new Promise((
     fulfill: (data?: string) => any,
-    reject: (errors: KeratinError[]) => any
+    reject: (errors: AuthError[]) => any
   ) => {
     if (inflight) {
       reject([{message: "duplicate"}]);
@@ -31,21 +31,21 @@ export function signup(credentials: Credentials): Promise<string> {
 
     post<TokenResponse>(url('/accounts'), credentials)
       .then(
-        (result) => fulfill(result.id_token),
-        (errors) => reject(errors)
+        (result: TokenResponse) => fulfill(result.id_token),
+        (errors: Error[]) => reject(errors)
       )
       .then(() => inflight = false);
   });
 }
 
-function isTaken(e: KeratinError) {
+function isTaken(e: AuthError) {
   return e.field === 'username' && e.message === 'TAKEN';
 }
 
 export function isAvailable(username: string): Promise<boolean> {
   return get<boolean>(url('/accounts/available'), {username})
     .then((bool) => bool)
-    .catch((e: Error | KeratinError[]) => {
+    .catch((e: Error | AuthError[]) => {
       if (!(e instanceof Error) && e.some(isTaken)) {
         return false;
       }
@@ -60,7 +60,7 @@ export function refresh(): Promise<string> {
 
 export function login(credentials: Credentials): Promise<string> {
   return post<TokenResponse>(url('/session'), credentials)
-    .then((result) => result.id_token);
+    .then((result: TokenResponse) => result.id_token);
 }
 
 export function logout(): Promise<void> {
