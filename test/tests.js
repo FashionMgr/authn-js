@@ -83,7 +83,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return FMAuthN.signup({username: 'test', password: 'test'})
+  return FMAuthN.signup({email: 'test', password: 'test'})
     .then(assertInstalledToken(assert));
 });
 QUnit.test("failure", function(assert) {
@@ -91,7 +91,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return FMAuthN.signup({username: 'test', password: 'test'})
+  return FMAuthN.signup({email: 'test', password: 'test'})
     .then(refuteSuccess(assert))
     .catch(function(errors) {
       assert.deepEqual(errors, [{field: 'foo', message: 'bar'}]);
@@ -105,11 +105,11 @@ QUnit.test("double submit", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  FMAuthN.signup({username: 'test', password: 'test'})
+  FMAuthN.signup({email: 'test', password: 'test'})
     .then(function (data) { assert.ok(true, "first request finished") })
     .then(done);
 
-  FMAuthN.signup({username: 'test', password: 'test'})
+  FMAuthN.signup({email: 'test', password: 'test'})
     .then(refuteSuccess(assert))
     .catch(function(errors) {
       assert.deepEqual(errors, [{message: 'duplicate'}]);
@@ -121,7 +121,7 @@ QUnit.test("double submit", function(assert) {
 
 QUnit.module("isAvailable", startServer);
 QUnit.test("name is not taken", function(assert) {
-  this.server.respondWith('GET', 'https://authn.example.com/accounts/available?username=test',
+  this.server.respondWith('GET', 'https://authn.example.com/accounts/available?email=test',
     jsonResult(true)
   );
 
@@ -131,8 +131,8 @@ QUnit.test("name is not taken", function(assert) {
     });
 });
 QUnit.test("name is taken", function(assert) {
-  this.server.respondWith('GET', 'https://authn.example.com/accounts/available?username=test',
-    jsonErrors({username: 'TAKEN'})
+  this.server.respondWith('GET', 'https://authn.example.com/accounts/available?email=test',
+    jsonErrors({email: 'TAKEN'})
   );
 
   return FMAuthN.isAvailable('test')
@@ -246,7 +246,7 @@ QUnit.test("success", function(assert) {
     jsonResult({id_token: idToken({age: 1})})
   );
 
-  return FMAuthN.login({username: 'test', password: 'test'})
+  return FMAuthN.login({email: 'test', password: 'test'})
     .then(assertInstalledToken(assert));
 });
 QUnit.test("failure", function(assert) {
@@ -254,7 +254,7 @@ QUnit.test("failure", function(assert) {
     jsonErrors({foo: 'bar'})
   );
 
-  return FMAuthN.login({username: 'test', password: 'test'})
+  return FMAuthN.login({email: 'test', password: 'test'})
     .then(refuteSuccess(assert))
     .catch(function(errors) {
       assert.deepEqual(errors, [{field: 'foo', message: 'bar'}]);
@@ -263,7 +263,7 @@ QUnit.test("failure", function(assert) {
 
 QUnit.module("requestPasswordReset", startServer);
 QUnit.test("success or failure", function(assert) {
-  this.server.respondWith('GET', 'https://authn.example.com/password/reset?username=test', '');
+  this.server.respondWith('GET', 'https://authn.example.com/password/reset?email=test', '');
 
   return FMAuthN.requestPasswordReset('test')
     .then(function () {
@@ -341,7 +341,7 @@ QUnit.test("success", function(assert) {
 
 QUnit.module("requestSessionToken", startServer);
 QUnit.test("success or failure", function(assert) {
-  this.server.respondWith('GET', 'https://authn.example.com/session/token?username=test', '');
+  this.server.respondWith('GET', 'https://authn.example.com/session/token?email=test', '');
 
   return FMAuthN.requestSessionToken('test')
     .then(function () {

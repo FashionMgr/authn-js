@@ -39,11 +39,11 @@ export function signup(credentials: Credentials): Promise<string> {
 }
 
 function isTaken(e: AuthError) {
-  return e.field === 'username' && e.message === 'TAKEN';
+  return e.field === 'email' && e.message === 'TAKEN';
 }
 
-export function isAvailable(username: string): Promise<boolean> {
-  return get<boolean>(url('/accounts/available'), {username})
+export function isAvailable(email: string): Promise<boolean> {
+  return get<boolean>(url('/accounts/available'), {email})
     .then((bool) => bool)
     .catch((e: Error | AuthError[]) => {
       if (!(e instanceof Error) && e.some(isTaken)) {
@@ -67,8 +67,8 @@ export function logout(): Promise<void> {
   return del<void>(url('/session'));
 }
 
-export function requestPasswordReset(username: string): Promise<{}> {
-  return get(url('/password/reset'), {username});
+export function requestPasswordReset(email: string): Promise<{}> {
+  return get(url('/password/reset'), {email});
 }
 
 export function changePassword(args: {password: string, currentPassword: string}): Promise<string> {
@@ -81,8 +81,8 @@ export function resetPassword(args: {password: string, token: string}): Promise<
     .then((result) => result.id_token);
 }
 
-export function requestSessionToken(username: string): Promise<{}> {
-  return get(url('/session/token'), {username});
+export function requestSessionToken(email: string): Promise<{}> {
+  return get(url('/session/token'), {email});
 }
 
 export function sessionTokenLogin(credentials: {token: string}): Promise<string> {
