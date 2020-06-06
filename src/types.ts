@@ -2,6 +2,12 @@ export interface Credentials {
   [index: string]: string | undefined;
   email: string;
   password: string;
+}
+
+export interface RegisterForm {
+  [index: string]: string | undefined;
+  email: string;
+  password: string;
   first_name: string;
   last_name: string;
   phone: string;

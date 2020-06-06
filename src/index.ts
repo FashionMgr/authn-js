@@ -1,4 +1,4 @@
-import { Credentials, SessionStore } from './types';
+import { Credentials, SessionStore, RegisterForm } from './types';
 import SessionManager from './SessionManager';
 import CookieSessionStore, { CookieSessionStoreOptions } from "./CookieSessionStore";
 import MemorySessionStore from './MemorySessionStore';
@@ -32,7 +32,7 @@ export function session(): string | undefined {
   return manager.sessionToken();
 }
 
-export function signup(credentials: Credentials): Promise<void> {
+export function signup(credentials: RegisterForm): Promise<void> {
   return API.signup(credentials)
     .then((token) => manager.update(token));
 }

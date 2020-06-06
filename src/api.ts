@@ -2,7 +2,7 @@
  * Bare API methods have no local side effects (unless you count debouncing).
  */
 
-import { Credentials, AuthError } from './types';
+import { Credentials, AuthError, RegisterForm } from './types';
 import { get, post, del } from "./verbs";
 
 // TODO: extract debouncing
@@ -17,7 +17,7 @@ interface TokenResponse {
   id_token: string;
 }
 
-export function signup(credentials: Credentials): Promise<string> {
+export function signup(form: RegisterForm): Promise<string> {
   return new Promise((
     fulfill: (data?: string) => any,
     reject: (errors: AuthError[]) => any
@@ -29,7 +29,7 @@ export function signup(credentials: Credentials): Promise<string> {
       inflight = true;
     }
 
-    post<TokenResponse>(url('/accounts'), credentials)
+    post<TokenResponse>(url('/accounts'), form)
       .then(
         (result: TokenResponse) => fulfill(result.id_token),
         (errors: Error[]) => reject(errors)

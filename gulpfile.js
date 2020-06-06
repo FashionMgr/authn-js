@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 var qunit = require('node-qunit-phantomjs');
 
 function build(cb) {
-  exec('yarn build', function (err, stdout, stderr) {
+  exec('npm run build', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     cb(err);
