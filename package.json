@@ -1,9 +1,9 @@
 {
   "name": "@fashionmanager/authn",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Browser integration library for AuthN service.",
-  "main": "./dist/authn.js",
-  "module": "./dist/authn.module.js",
+  "main": "./dist/fm-authn.js",
+  "module": "./dist/fm-authn.module.js",
   "types": "./dist/index.d.ts",
   "dependencies": {},
   "devDependencies": {
