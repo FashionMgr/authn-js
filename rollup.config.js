@@ -5,7 +5,7 @@ export default [
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/fm-authn.js",
+      file: "./dist/index.js",
       format: "cjs"
     },
     plugins: [filesize()]
@@ -13,7 +13,7 @@ export default [
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/fm-authn.umd.js",
+      file: "./dist/index.umd.js",
       format: "umd"
     },
     name: "FMAuthN",
@@ -22,7 +22,7 @@ export default [
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/fm-authn.min.js",
+      file: "./dist/index.min.js",
       format: "umd"
     },
     name: "FMAuthN",
@@ -31,7 +31,7 @@ export default [
   {
     input: "./lib/index.js",
     output: {
-      file: "./dist/fm-authn.module.js",
+      file: "./dist/index.module.js",
       format: "es"
     },
     plugins: [filesize()]

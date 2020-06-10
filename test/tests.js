@@ -371,3 +371,18 @@ QUnit.test("failure", function(assert) {
       assert.deepEqual(errors, [{field: 'foo', message: 'bar'}]);
     });
 });
+
+QUnit.module("passwordScore", startServer);
+QUnit.test("success", function(assert) {
+  this.server.respondWith('POST', 'https://authn.example.com/password/score',
+  jsonResult({score: 1, requiredScore: 3})
+  );
+
+  return FMAuthN.passwordScore({
+      password: 'secret'
+    })
+    .then(function (returnedScore) {
+      assert.equal(returnedScore.score, 1, "password score is the equal");
+      assert.equal(returnedScore.requiredScore, 3, "password requiredScore is the equal");
+    });
+});

@@ -2,7 +2,7 @@
  * Bare API methods have no local side effects (unless you count debouncing).
  */
 
-import { Credentials, AuthError, RegisterForm } from './types';
+import { Credentials, AuthError, RegisterForm, PasswordScore } from './types';
 import { get, post, del } from "./verbs";
 
 // TODO: extract debouncing
@@ -49,6 +49,13 @@ export function isAvailable(email: string): Promise<boolean> {
       if (!(e instanceof Error) && e.some(isTaken)) {
         return false;
       }
+      throw e;
+    });
+}
+export function passwordScore(password: string): Promise<PasswordScore> {
+  return post<PasswordScore>(url('/password/score'), {password})
+    .then((score) => score)
+    .catch((e: Error | AuthError[]) => {
       throw e;
     });
 }

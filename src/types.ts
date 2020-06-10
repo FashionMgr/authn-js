@@ -48,3 +48,8 @@ export interface SessionStore {
 export interface StringMap {
   [index: string]: string | undefined;
 }
+
+export interface PasswordScore {
+  score: number;
+  requiredScore: number;
+}

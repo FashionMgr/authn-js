@@ -1,4 +1,4 @@
-import { Credentials, SessionStore, RegisterForm } from './types';
+import { Credentials, SessionStore, RegisterForm, PasswordScore } from './types';
 import SessionManager from './SessionManager';
 import CookieSessionStore, { CookieSessionStoreOptions } from "./CookieSessionStore";
 import MemorySessionStore from './MemorySessionStore';
@@ -60,6 +60,10 @@ export function resetPassword(args: {password: string, token: string}): Promise<
 export function sessionTokenLogin(args: {token: string}): Promise<void> {
   return API.sessionTokenLogin(args)
     .then((token) => manager.update(token));
+}
+
+export function passwordScore(password: string): Promise<PasswordScore> {
+  return API.passwordScore(password);
 }
 
 // export remaining API methods unmodified
